@@ -28,9 +28,12 @@ public class JwtUtil {
 
         // 设置jwt的body
         JwtBuilder builder = Jwts.builder()
-                // 如果有私有声明，一定要先设置这个自己创建的私有的声明，这个是给builder的claim赋值，一旦写在标准的声明赋值之后，就是覆盖了那些标准的声明的
+                /*如果有私有声明，一定要先设置这个自己创建的私有的声明，这个是给builder的claim赋值，一旦写在标准的声明赋值之后，就是覆盖了那些标准的声明的
+                claims:在载荷部分，我们可以定义自己所需的声明来存储一些额外的数据。通过将员工的ID放入JWT的声明中，可以在验证和解析JWT时方便地获取到员工的ID信息。
+                claims：包含要添加到JWT负载（Payload）的声明信息的Map对象。可以在此参数中添加自定义的声明，也可以包含一些标准的声明如 ("iss"（签发者）、"sub"（主题）、"exp"（过期时间）)。
+                一般情况下，只需要在claims中添加自定义的声明，如用户ID、角色等信息。而对于标准声明，如iss（签发者）、sub（主题）、exp（过期时间）等，可以直接在JwtBuilder对象上调用相应的方法进行设置，避免了与claims中的声明冲突的问题。*/
                 .setClaims(claims)
-                // 设置签名使用的签名算法和签名使用的秘钥
+                // 设置签名使用的签名算法和签名使用的秘钥：admin-secret-key: itcast（配置文件）、String、不可泄漏
                 .signWith(signatureAlgorithm, secretKey.getBytes(StandardCharsets.UTF_8))
                 // 设置过期时间
                 .setExpiration(exp);

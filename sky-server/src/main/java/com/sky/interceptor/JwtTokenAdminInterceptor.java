@@ -1,6 +1,7 @@
 package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.context.BaseContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -26,7 +27,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
     /**
      * 校验jwt
-     *
+     *拦截器之前执行
      * @param request
      * @param response
      * @param handler
@@ -41,25 +42,30 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             ///admin/employee/ 不是
             //使用反射机制获取路径上的方法名称
             //当前拦截到的不是动态方法，直接放行
+            System.out.println("放行静态资源...");
+            log.info("放行静态资源...");
             return true;
         }
 
         //1、从请求头中获取令牌
         //jwtProperties.getAdminTokenName() = admin-token-name: token(yml配置文件中)
         String token = request.getHeader(jwtProperties.getAdminTokenName());
-        System.out.println("token值："+token);
-
         //2、校验令牌
         try {
             log.info("jwt校验:{}", token);
+            //验证token，如果验证token失败则会抛出异常
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工id：{}", empId);
-            System.out.println("令牌校验通过，放行");
+            //它提供了线程局部变量的功能。每个 ThreadLocal 实例都维护了一个独立的变量副本，每个线程可以访问到自己的变量副本而不会受其他线程的影响。
+            BaseContext.setCurrentId(empId);
+            log.info("jwt校验通过");
             //3、通过，放行
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
+            log.info("jwt校验不通过");
+            //前后端分离页面跳转由前端实现：前端根据响应的代码判断
             response.setStatus(401);
             return false;
         }
