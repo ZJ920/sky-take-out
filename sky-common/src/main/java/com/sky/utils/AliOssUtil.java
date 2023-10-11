@@ -26,9 +26,9 @@ public class AliOssUtil {
      * @param objectName
      * @return
      */
-    public String upload(byte[] bytes, String objectName) {
+    public String upload(byte[] bytes, String objectName) {//文件二进制数据、文件名
 
-        // 创建OSSClient实例。
+        // 创建OSSClient实例：包装了bucket的endpoint、id、密码
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
         try {

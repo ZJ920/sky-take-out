@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishMapper">
+    <resultMap id="dishResultMap" type="com.sky.vo.DishVO">
+        <id column="id" property="id"/>
+        <result  property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="description" column="description"/>
+        <result property="image" column="image"/>
+        <result property="status" column="status"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="updateTime" column="update_time"/>
+        <!--对于DishVO的categoryId逻辑外键：-->
+        <!--
+        这段代码是 MyBatis 中用于建立对象之间关联关系的配置。
+        <association> 元素用于定义一个对象关联关系，其中 property 属性指定了关联对象在当前对象中的属性名。
+        在 <association> 元素内部，可以使用 <id> 和 <result> 元素来配置关联对象的字段与属性之间的映射关系。
+        例如，<id> 元素用于配置主键字段的映射，column 属性指定了数据库表中的列名，property 属性指定了关联对象的属性名。
+        <result> 元素用于配置其他字段的映射关系，column 属性指定了数据库表中的列名，property 属性指定了关联对象的属性名。
+        <association> 元素用于建立 DishVO 对象与 Category 对象之间的关联关系。通过 category_id 字段将两个对象关联起来，并通过category的id 字段和实现 Category 对象的属性映射。
+        这样配置后，在执行查询操作时，MyBatis 会根据配置的关联关系将查询结果进行对象的映射和关联赋值，使得 Dish 对象中的 category 属性可以正确地关联到相应的 Category 对象。
+        希望这样能解答你的问题。如有更多疑问，请随时提出。-->
+<!--        <association property="categoryId">-->
+<!--            &lt;!&ndash;表示category表的id与&ndash;&gt;-->
+<!--            <id property="id" column="category_id"/>-->
+<!--        </association>-->
+
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into dish
+            (name, category_id, price, image, description, create_time, update_time, create_user,update_user, status)
+        values
+            (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{status})
+    </insert>
+
+<!--    <select id="pageQuery" resultType="com.sky.vo.DishVO">-->
+<!--        &lt;!&ndash;-->
+<!--        SELECT dish.*, category.name-->
+<!--        FROM dish-->
+<!--        LEFT OUTER JOIN category ON dish.category_id = category.id-->
+<!--        &ndash;&gt;-->
+<!--        &lt;!&ndash;-->
+<!--        使用 AS 关键字将 category.name 字段设置为别名 categoryName。-->
+<!--        这样，在查询结果中，category.name 的值将以 categoryName 字段名呈现-->
+<!--        &ndash;&gt;-->
+<!--        select d.* , c.name-->
+<!--        from dish d-->
+<!--        left outer join category c on d.category_id = c.id-->
+<!--        <where>-->
+<!--            <if test="name != null">-->
+<!--                and d.name like concat('%',#{name},'%')-->
+<!--            </if>-->
+<!--            <if test="categoryId != null">-->
+<!--                and d.category_id = #{categoryId}-->
+<!--            </if>-->
+<!--            <if test="status != null">-->
+<!--                and d.status = #{status}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        order by d.create_time desc-->
+<!--    </select>-->
+
+    <select id="pageQuery" resultMap="dishResultMap">
+        <!--
+        在DishVO中category.name返回的name和菜品名称name自动封装冲突，使用别名categoryName
+        -->
+        SELECT dish.*, category.name as categoryName
+        FROM dish
+        LEFT OUTER JOIN category ON dish.category_id = category.id
+        <where>
+            <if test="name != null and name != ''">
+                and dish.name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                and dish.category_id = #{categoryId}
+            </if>
+            <if test="status != null and status != ''">
+                and dish.status = #{status}
+            </if>
+        </where>
+        order by dish.create_time desc
+    </select>
+</mapper>
