@@ -82,4 +82,20 @@
         </where>
         order by dish.create_time desc
     </select>
+
+    <select id="selectDishesByIds" resultMap="dishResultMap">
+        SELECT *
+        FROM dish
+        WHERE id IN
+        <foreach item="dishId" collection="ids" open="(" separator="," close=")">
+            #{dishId}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from dish where id in
+        <foreach collection="ids" item="dishId" open="(" separator="," close=")">
+            #{dishId}
+        </foreach>
+    </delete>
 </mapper>

@@ -8,12 +8,11 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
-public interface DishMapper {
+public interface SetmealDishMapper {
 
     /**
      * 根据分类id查询菜品数量
@@ -46,10 +45,5 @@ public interface DishMapper {
      */
     List<DishVO> selectDishesByIds(List<Long> ids);
 
-    /**
-     * 根据id数组删除菜品
-     * @param ids
-     * @return
-     */
-    void deleteById(List<Long> ids);
+    List<Long> getSetmealsByDishIds(List<Long> ids);
 }
