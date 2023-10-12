@@ -98,4 +98,24 @@
             #{dishId}
         </foreach>
     </delete>
+
+    <!--parameterType:参数类型-->
+
+    <!--
+    useGeneratedKeys="true" keyProperty="id":
+    返回主键（id），赋值给实现类Employee中的成员变量：id
+    使用Employee.getId获取id
+    -->
+    <update id="update">
+        update dish
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>
