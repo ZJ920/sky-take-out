@@ -45,6 +45,7 @@ public class CommonController {
             String objectName = UUID.randomUUID().toString() + extension;
 
             //文件的请求路径
+            //在OssConfiguration配置类中的aliOssUtil（@Bean）方法被注入容器，使用@Autowired：private AliOssUtil aliOssUtil，aliOssUtil里就会配置相关属性
             String filePath = aliOssUtil.upload(file.getBytes(), objectName);
             return Result.success(filePath);
         } catch (IOException e) {

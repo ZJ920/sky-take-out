@@ -14,12 +14,12 @@ spring:
       password: ${sky.datasource.password}
 
 mybatis:
-  #mapper配置文件
+  #mapper配置文件：指定Mapper配置文件所在的路径，classpath:mapper/*.xml表示在类路径下的mapper目录中查找所有的XML文件作为Mapper配置文件。
   mapper-locations: classpath:mapper/*.xml
-  #mapper映射文件
+  #mapper映射文件：指定实体类的包名，这样在Mapper配置文件中可以直接使用简单类名来引用实体类，而不需要写全限定类名。
   type-aliases-package: com.sky.entity
   configuration:
-    #开启驼峰命名
+    #开启驼峰命名：当数据库字段采用下划线分隔时，例如first_name，开启该设置后，在映射到Java对象时会自动转换成驼峰命名规则，即firstName。
     map-underscore-to-camel-case: true
 
 logging:

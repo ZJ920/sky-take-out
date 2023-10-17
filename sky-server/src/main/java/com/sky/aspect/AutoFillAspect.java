@@ -40,7 +40,7 @@ public class AutoFillAspect {
         AutoFill autoFill = methodSignature.getMethod().getAnnotation(AutoFill.class);
         OperationType value = autoFill.value();
 
-        //获取到当前被拦截的方法的参数--实体对象（这里是Employee、Category对象）
+        //获取到当前被拦截的方法的参数--实体对象（这里是Employee、Category等对象）
         Object[] args = joinPoint.getArgs();//参数实体对象
         Object entity = args[0];//注：一般把想要使用的参数实体对象放在方法第一个参数
 

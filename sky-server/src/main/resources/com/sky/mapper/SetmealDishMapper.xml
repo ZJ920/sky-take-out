@@ -25,4 +25,16 @@
         </foreach>
     </select>
 
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO setmeal_dish (setmeal_id, dish_id, name, price, copies)
+        VALUES
+        <!--
+        collection="setmealDishes":遍历的List
+        item="setmealDish"：将List的每个元素赋值给setmealDish
+        -->
+        <foreach collection="setmealDishes" item="setmealDish" separator=",">
+            (#{setmealDish.setmealId},#{setmealDish.dishId}, #{setmealDish.name}, #{setmealDish.price}, #{setmealDish.copies})
+        </foreach>
+    </insert>
+
 </mapper>
