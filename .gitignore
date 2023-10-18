@@ -3,4 +3,9 @@
 *.iml
 *.class
 *Test.java
-**/test/
+**/test/### Example user template template
+### Example user template
+
+# IntelliJ project files
+out
+gen
