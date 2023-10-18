@@ -6,12 +6,20 @@ spring:
     active: dev
   main:
     allow-circular-references: true
+  #数据源配置，使用阿里巴巴的Druid连接池来管理数据源
   datasource:
     druid:
       driver-class-name: ${sky.datasource.driver-class-name}
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+  #Redis
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+    #数据库：有0-15共16个，默认0
+    database: ${sky.redis.database}
 
 mybatis:
   #mapper配置文件：指定Mapper配置文件所在的路径，classpath:mapper/*.xml表示在类路径下的mapper目录中查找所有的XML文件作为Mapper配置文件。
