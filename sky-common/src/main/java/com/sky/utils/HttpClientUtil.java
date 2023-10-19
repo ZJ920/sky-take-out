@@ -47,6 +47,9 @@ public class HttpClientUtil {
                     builder.addParameter(key,paramMap.get(key));
                 }
             }
+
+
+            System.out.println("URL为："+builder.getPath());
             URI uri = builder.build();
 
             //创建GET请求

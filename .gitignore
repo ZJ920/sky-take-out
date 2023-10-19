@@ -9,3 +9,4 @@
 # IntelliJ project files
 out
 gen
+*dev.yml
