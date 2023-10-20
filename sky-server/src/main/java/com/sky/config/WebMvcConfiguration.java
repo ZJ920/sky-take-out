@@ -1,6 +1,7 @@
 package com.sky.config;
 
 import com.sky.interceptor.JwtTokenAdminInterceptor;
+import com.sky.interceptor.JwtTokenUserInterceptor;
 import com.sky.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
 
     /**
      * 注册自定义拦截器
@@ -39,14 +42,29 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
         //这里的拦截器针对的是 /admin 路径下的请求，如果项目中还有其他路径需要进行拦截，可以在方法中添加对应的注册语句
+        /*
+        拦截 /admin/** 路径下的请求
+        拦截 /user/** 路径下的请求
+        排除 /admin/employee/login 路径，即该路径下的请求不会被拦截
+        排除 /user/user/login 路径，即该路径下的请求不会被拦截
+         */
         registry.addInterceptor(jwtTokenAdminInterceptor)
+                //拦截
                 .addPathPatterns("/admin/**")
+                //放行
                 .excludePathPatterns("/admin/employee/login");
+
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                //拦截
+                .addPathPatterns("/user/**")
+                //放行
+                .excludePathPatterns("/user/user/login","/user/shop/status");
     }
 
     /**
      * 通过knife4j生成接口文档
      * 管理端
+     *
      * @return
      */
     @Bean
@@ -65,9 +83,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .build();
         return docket;
     }
+
     /**
      * 通过knife4j生成接口文档
      * 用户端
+     *
      * @return
      */
     @Bean
@@ -89,6 +109,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
     @Override
@@ -99,6 +120,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 扩展Spring MVC框架的消息转化器
+     *
      * @param converters
      */
     @Override
@@ -109,6 +131,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         //需要为消息转换器设置一个对象转换器，对象转换器可以将Java对象序列化为json数据
         converter.setObjectMapper(new JacksonObjectMapper());
         //将自己的消息转化器加入容器中
-        converters.add(0,converter);
+        converters.add(0, converter);
     }
 }

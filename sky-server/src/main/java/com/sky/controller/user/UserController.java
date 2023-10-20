@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController("userShopController")
+@RestController
 @RequestMapping("/user/user")
 @Api(tags = "用户相关")
 @Slf4j
@@ -38,6 +38,7 @@ public class UserController {
         log.info("用户登录信息： {}", userLoginDTO.getCode());
 
         //微信登录:id openid token
+        //*id、openid、姓名、手机号、性别 0 女 1 男、身份证号、头像、注册时间
         User user = userService.login(userLoginDTO);
 
         //生成jwt令牌
@@ -45,12 +46,13 @@ public class UserController {
         claims.put(JwtClaimsConstant.USER_ID, user.getId());
         String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
 
+        //id、openid、token
         UserLoginVO userLoginVO = UserLoginVO.builder()
                 .id(user.getId())
                 .openid(user.getOpenid())
                 .token(token)
                 .build();
-
+        //log.info("登录成功返回的信息：{}", userLoginVO);
         return Result.success(userLoginVO);
     }
 }

@@ -25,31 +25,37 @@ import java.util.Map;
  */
 public class HttpClientUtil {
 
-    static final  int TIMEOUT_MSEC = 5 * 1000;
+    static final int TIMEOUT_MSEC = 5 * 1000;
 
     /**
      * 发送GET方式请求
+     *
      * @param url
      * @param paramMap
      * @return
      */
-    public static String doGet(String url,Map<String,String> paramMap){
+    public static String doGet(String url, Map<String, String> paramMap) {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         String result = "";
         CloseableHttpResponse response = null;
 
-        try{
+        try {
+            // 创建URIBuilder对象
             URIBuilder builder = new URIBuilder(url);
-            if(paramMap != null){
+            if (paramMap != null) {
+                // 遍历参数Map
                 for (String key : paramMap.keySet()) {
-                    builder.addParameter(key,paramMap.get(key));
+
+                    // 拼接参数
+                    builder.addParameter(key, paramMap.get(key));
                 }
             }
 
 
-            System.out.println("URL为："+builder.getPath());
+            System.out.println("URL为：" + builder.getPath());
+            // 获取URI
             URI uri = builder.build();
 
             //创建GET请求
@@ -59,14 +65,17 @@ public class HttpClientUtil {
             response = httpClient.execute(httpGet);
 
             //判断响应状态
-            if(response.getStatusLine().getStatusCode() == 200){
-                result = EntityUtils.toString(response.getEntity(),"UTF-8");
+            if (response.getStatusLine().getStatusCode() == 200) {
+                //创建一个字符串来存储响应的结果
+                result = EntityUtils.toString(response.getEntity(), "UTF-8");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
+                // 关闭响应
                 response.close();
+                // 关闭客户端
                 httpClient.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,6 +87,7 @@ public class HttpClientUtil {
 
     /**
      * 发送POST方式请求
+     *
      * @param url
      * @param paramMap
      * @return
@@ -125,6 +135,7 @@ public class HttpClientUtil {
 
     /**
      * 发送POST方式请求
+     *
      * @param url
      * @param paramMap
      * @return
@@ -144,9 +155,9 @@ public class HttpClientUtil {
                 //构造json格式数据
                 JSONObject jsonObject = new JSONObject();
                 for (Map.Entry<String, String> param : paramMap.entrySet()) {
-                    jsonObject.put(param.getKey(),param.getValue());
+                    jsonObject.put(param.getKey(), param.getValue());
                 }
-                StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
+                StringEntity entity = new StringEntity(jsonObject.toString(), "utf-8");
                 //设置请求编码
                 entity.setContentEncoding("utf-8");
                 //设置数据类型
@@ -172,6 +183,7 @@ public class HttpClientUtil {
 
         return resultString;
     }
+
     private static RequestConfig builderRequestConfig() {
         return RequestConfig.custom()
                 .setConnectTimeout(TIMEOUT_MSEC)
