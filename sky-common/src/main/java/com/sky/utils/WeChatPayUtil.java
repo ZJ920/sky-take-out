@@ -172,8 +172,11 @@ public class WeChatPayUtil {
 
         String prepayId = jsonObject.getString("prepay_id");
         if (prepayId != null) {
+            //获取当前时间戳
             String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
+            //生成随机字符串
             String nonceStr = RandomStringUtils.randomNumeric(32);
+            //创建list集合，存放签名参数
             ArrayList<Object> list = new ArrayList<>();
             list.add(weChatProperties.getAppid());
             list.add(timeStamp);
@@ -187,6 +190,7 @@ public class WeChatPayUtil {
             String signMessage = stringBuilder.toString();
             byte[] message = signMessage.getBytes();
 
+            //使用签名算法，获取签名
             Signature signature = Signature.getInstance("SHA256withRSA");
             signature.initSign(PemUtil.loadPrivateKey(new FileInputStream(new File(weChatProperties.getPrivateKeyFilePath()))));
             signature.update(message);

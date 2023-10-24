@@ -46,9 +46,10 @@ public interface ShoppingCartMapper {
     List<ShoppingCart> findByUserId(Long userId);
 
     /**
-     * 删除购物车中商品
+     * 删除购物车中商品：通过userId、菜品id、套餐id动态删除
      * @param shoppingCart
      * @return
      */
     void delete(ShoppingCart shoppingCart);
+
 }

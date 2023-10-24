@@ -15,6 +15,7 @@ UserMapper {
 
     /**
      * 通过openId查询用户
+     *
      * @param openid
      * @return
      */
@@ -23,7 +24,17 @@ UserMapper {
 
     /**
      * 新建用户
+     *
      * @param user
      */
     void insert(User user);
+
+    /**
+     * 通过主键（token实现）查询用户
+     *
+     * @param userId
+     * @return
+     */
+    @Select("select * from user where id = #{userId}")
+    User selectById(Long userId);
 }

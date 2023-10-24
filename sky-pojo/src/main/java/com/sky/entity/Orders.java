@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 订单
+ * 订单表
  */
 @Data
 @Builder
@@ -48,7 +48,7 @@ public class Orders implements Serializable {
     //下单用户id
     private Long userId;
 
-    //地址id
+    //地址簿id：have
     private Long addressBookId;
 
     //下单时间
@@ -57,16 +57,16 @@ public class Orders implements Serializable {
     //结账时间
     private LocalDateTime checkoutTime;
 
-    //支付方式 1微信，2支付宝
+    //支付方式 1微信，2支付宝：have
     private Integer payMethod;
 
     //支付状态 0未支付 1已支付 2退款
     private Integer payStatus;
 
-    //实收金额
+    //实收金额：have
     private BigDecimal amount;
 
-    //备注
+    //备注：have
     private String remark;
 
     //用户名
@@ -90,21 +90,21 @@ public class Orders implements Serializable {
     //订单取消时间
     private LocalDateTime cancelTime;
 
-    //预计送达时间
+    //预计送达时间：have
     private LocalDateTime estimatedDeliveryTime;
 
-    //配送状态  1立即送出  0选择具体时间
+    //配送状态  1立即送出  0选择具体时间：have
     private Integer deliveryStatus;
 
     //送达时间
     private LocalDateTime deliveryTime;
 
-    //打包费
+    //打包费：have
     private int packAmount;
 
-    //餐具数量
+    //餐具数量：have
     private int tablewareNumber;
 
-    //餐具数量状态  1按餐量提供  0选择具体数量
+    //餐具数量状态  1按餐量提供  0选择具体数量：have
     private Integer tablewareStatus;
 }
