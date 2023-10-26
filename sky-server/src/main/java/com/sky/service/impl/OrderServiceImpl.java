@@ -494,61 +494,82 @@ public class OrderServiceImpl implements OrderService {
      * @param address
      */
     private void checkOutOfRange(String address) {
+        //创建一个map对象
         Map map = new HashMap();
+        //将shopAddress放入map中
         map.put("address",shopAddress);
+        //设置输出格式为json
         map.put("output","json");
+        //设置ak
         map.put("ak",ak);
 
         //获取店铺的经纬度坐标
         String shopCoordinate = HttpClientUtil.doGet("https://api.map.baidu.com/geocoding/v3", map);
 
+        //将返回的json字符串转换为JSONObject对象
         JSONObject jsonObject = JSON.parseObject(shopCoordinate);
+        //本次API访问状态，如果成功返回0，如果失败返回其他数字。（见服务状态码）
         if(!jsonObject.getString("status").equals("0")){
+            //如果返回的状态码不为0，抛出异常
             throw new OrderBusinessException("店铺地址解析失败");
         }
 
-        //数据解析
+        //数据解析、result：返回的结果
         JSONObject location = jsonObject.getJSONObject("result").getJSONObject("location");
+        //获取店铺的经纬度坐标
         String lat = location.getString("lat");
         String lng = location.getString("lng");
         //店铺经纬度坐标
         String shopLngLat = lat + "," + lng;
 
+        //将用户收货地址放入map中
         map.put("address",address);
         //获取用户收货地址的经纬度坐标
         String userCoordinate = HttpClientUtil.doGet("https://api.map.baidu.com/geocoding/v3", map);
 
+        //将返回的json字符串转换为JSONObject对象
         jsonObject = JSON.parseObject(userCoordinate);
+        //判断返回的状态码是否为0
         if(!jsonObject.getString("status").equals("0")){
+            //如果返回的状态码不为0，抛出异常
             throw new OrderBusinessException("收货地址解析失败");
         }
 
         //数据解析
         location = jsonObject.getJSONObject("result").getJSONObject("location");
+        //获取用户收货地址的经纬度坐标
         lat = location.getString("lat");
         lng = location.getString("lng");
         //用户收货地址经纬度坐标
         String userLngLat = lat + "," + lng;
 
+        //设置起点和终点
         map.put("origin",shopLngLat);
         map.put("destination",userLngLat);
+        //不显示路线规划的步骤信息
         map.put("steps_info","0");
 
         //路线规划
         String json = HttpClientUtil.doGet("https://api.map.baidu.com/directionlite/v1/driving", map);
 
+        //将返回的json字符串转换为JSONObject对象
         jsonObject = JSON.parseObject(json);
+        //判断返回的状态码是否为0
         if(!jsonObject.getString("status").equals("0")){
+            //如果返回的状态码不为0，抛出异常
             throw new OrderBusinessException("配送路线规划失败");
         }
 
         //数据解析
         JSONObject result = jsonObject.getJSONObject("result");
+        //获取配送路线规划的距离
         JSONArray jsonArray = (JSONArray) result.get("routes");
         Integer distance = (Integer) ((JSONObject) jsonArray.get(0)).get("distance");
 
+        //判断配送路线规划的距离是否超过5000米
         if(distance > 5000){
             //配送距离超过5000米
+            //如果超过5000米，抛出异常
             throw new OrderBusinessException("超出配送范围");
         }
     }
