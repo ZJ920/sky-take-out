@@ -7,7 +7,9 @@ import com.sky.entity.User;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -36,7 +38,7 @@ public interface OrderMapper {
      * 根据userId查询订单
      * @param userId
      */
-    @Select("select * from orders where user_id = #{userId}")
+    @Select("select * from orders where user_id = #{userId} order by order_time desc")
     Page<OrderVO> selectByUserId(Long userId);
 
     /**
@@ -60,4 +62,19 @@ public interface OrderMapper {
      */
     @Select("select count(id) from orders where status = #{status}")
     Integer countStatus(Integer status);
+
+    /**
+     * 根据状态和下单时间查询订单
+     * @param status
+     * @param orderTime
+     */
+    @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
+    List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime orderTime);
+
+    /**
+     * 通过userId修改订单状态
+     * @param userId
+     */
+    @Update("update orders set pay_status = 2 where user_id = #{userId}")
+    void updateStatusByUserId(Long userId);
 }

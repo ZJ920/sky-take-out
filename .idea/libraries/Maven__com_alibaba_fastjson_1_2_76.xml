@@ -8,7 +8,6 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../../../../Maven/apache-maven-3.6.1/mvn_local/com/alibaba/fastjson/1.2.76/fastjson-1.2.76-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../../../Maven/apache-maven-3.6.1/mvn_local/com/alibaba/fastjson/1.2.76/fastjson-1.2.76.jar!/" />
     </SOURCES>
   </library>
 </component>
