@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.entity.User;
@@ -11,6 +12,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -77,4 +79,40 @@ public interface OrderMapper {
      */
     @Update("update orders set pay_status = 2 where user_id = #{userId}")
     void updateStatusByUserId(Long userId);
+
+    /**
+     * 根据动态条件统计营业额
+     * @param map
+     */
+    Double sumByMap(Map map);
+
+    /**
+     *根据动态条件统计订单数量
+     * @param map
+     */
+    Integer countByMap(Map map);
+
+    /**
+     * 查询商品销量排名
+     * @param begin
+     * @param end
+     */
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    /*
+        select od.name as name,sum(od.number) as number from order_detail od ,orders o
+        where od.order_id = o.id
+        and o.status = 5
+        and order_time >
+        </if>
+        <if test="end != null">
+            and order_time &lt;= #{end}
+        </if>
+        group by name
+        order by number desc
+        limit 0, 10
+
+
+
+     */
 }

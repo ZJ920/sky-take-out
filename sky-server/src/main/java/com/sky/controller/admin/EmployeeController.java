@@ -10,6 +10,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
+import com.sky.vo.EmployeeEditPasswordVO;
 import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -148,6 +149,18 @@ public class EmployeeController {
     public Result update(@RequestBody EmployeeDTO employeeDTO){
         log.info("id修改员工信息:{}",employeeDTO);
         employeeService.update(employeeDTO);
+        return Result.success();
+    }
+
+    /**
+     *员工修改密码
+     * @return
+     */
+    @PutMapping("/editPassword")
+    @ApiOperation("员工修改密码")
+    public Result editPassword(@RequestBody EmployeeEditPasswordVO employeeEditPasswordVO){
+        log.info("员工修改密码：{}", employeeEditPasswordVO);
+        employeeService.editPassword(employeeEditPasswordVO);
         return Result.success();
     }
 }

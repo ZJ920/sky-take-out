@@ -5,6 +5,7 @@ import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
+import com.sky.vo.EmployeeEditPasswordVO;
 
 import java.util.List;
 
@@ -41,4 +42,10 @@ public interface EmployeeService {
      * @return Result<Employee>
      */
     void update(EmployeeDTO employeeDTO);
+
+    /**
+     *员工修改密码
+     * @return
+     */
+    void editPassword(EmployeeEditPasswordVO employeeEditPasswordVO);
 }

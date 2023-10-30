@@ -18,6 +18,7 @@ import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
+import com.sky.vo.EmployeeEditPasswordVO;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,6 +139,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * id修改员工信息
+     *
      * @param employeeDTO 员工信息
      * @return Result<Employee>
      */
@@ -157,4 +159,34 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
     }
 
+    /**
+     * 员工修改密码
+     *
+     * @return
+     */
+    @Override
+    public void editPassword(EmployeeEditPasswordVO employeeEditPasswordVO) {
+        //从线程中获取员工id
+        employeeEditPasswordVO.setEmpId(BaseContext.getCurrentId());
+        Long empId = employeeEditPasswordVO.getEmpId();
+
+        String oldPassword = employeeEditPasswordVO.getOldPassword();
+        //密码比对
+        Employee employee = employeeMapper.getByUserId(empId);
+        //进行md5加密，然后再进行比对
+        oldPassword = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        if (!oldPassword.equals(employee.getPassword())) {
+            //密码错误
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        try {
+            String newPassword = employeeEditPasswordVO.getNewPassword();
+            newPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+            employee.setPassword(newPassword);
+            employeeMapper.update(employee);
+        } catch (Exception e) {
+            throw new PasswordErrorException(MessageConstant.PASSWORD_UPDATE_ERROR);
+        }
+    }
 }
