@@ -91,8 +91,8 @@ public class EmployeeController {
      */
     @PostMapping
     @ApiOperation("新增员工")
-    public Result<String> save(@RequestBody EmployeeDTO employeeDTO){
-        log.info("新增员工:{}",employeeDTO);
+    public Result<String> save(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("新增员工:{}", employeeDTO);
         employeeService.save(employeeDTO);
         return Result.success();
     }
@@ -104,8 +104,8 @@ public class EmployeeController {
      */
     @GetMapping("/page")
     @ApiOperation("员工分页（条件）查询")
-    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
-        log.info("员工分页（条件）查询:{}",employeePageQueryDTO);
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
+        log.info("员工分页（条件）查询:{}", employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
@@ -120,8 +120,8 @@ public class EmployeeController {
     //http://localhost:8080/admin/employee/status/1?id=7
     //{status}:@PathVariable:url路径获取参数
     //?id=7：地址栏获取参数
-    public Result startOnStop(@PathVariable Integer status,long id){
-        log.info("员工状态更新:启用状态：{},用户id：{}",status,id);
+    public Result startOnStop(@PathVariable Integer status, long id) {
+        log.info("员工状态更新:启用状态：{},用户id：{}", status, id);
         employeeService.startOnStop(status, id);
         return Result.success();
     }
@@ -133,32 +133,34 @@ public class EmployeeController {
      */
     @GetMapping("/{id}")
     @ApiOperation("id查询员工信息")
-    public Result<Employee> selectById(@PathVariable long id){
-        log.info("id查询员工信息:{}",id);
+    public Result<Employee> selectById(@PathVariable long id) {
+        log.info("id查询员工信息:{}", id);
         Employee employee = employeeService.selectById(id);
         return Result.success(employee);
     }
 
     /**
      * id修改员工信息
+     *
      * @param employeeDTO 员工信息
      * @return Result<Employee>
      */
     @PutMapping
     @ApiOperation("id修改员工信息")
-    public Result update(@RequestBody EmployeeDTO employeeDTO){
-        log.info("id修改员工信息:{}",employeeDTO);
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("id修改员工信息:{}", employeeDTO);
         employeeService.update(employeeDTO);
         return Result.success();
     }
 
     /**
-     *员工修改密码
+     * 员工修改密码
+     *
      * @return
      */
     @PutMapping("/editPassword")
     @ApiOperation("员工修改密码")
-    public Result editPassword(@RequestBody EmployeeEditPasswordVO employeeEditPasswordVO){
+    public Result editPassword(@RequestBody EmployeeEditPasswordVO employeeEditPasswordVO) {
         log.info("员工修改密码：{}", employeeEditPasswordVO);
         employeeService.editPassword(employeeEditPasswordVO);
         return Result.success();
