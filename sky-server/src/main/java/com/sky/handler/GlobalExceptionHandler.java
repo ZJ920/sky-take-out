@@ -1,6 +1,7 @@
 package com.sky.handler;
 
 import com.sky.constant.MessageConstant;
+import com.sky.exception.AdminException;
 import com.sky.exception.BaseException;
 import com.sky.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
         log.error("异常信息：{}", message);
         String userName = message.split(" ")[2];
         return Result.error(userName + MessageConstant.ACCOUNT_ALREADY_EXISTS);
+    }
+
+    @ExceptionHandler(AdminException.class)
+    public Result adminException(AdminException a){
+        log.error("异常信息：{}", a.getMessage());
+        return Result.error(a.getMessage());
     }
 
 }

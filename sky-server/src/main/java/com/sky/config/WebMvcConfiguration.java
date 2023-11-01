@@ -59,6 +59,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/user/**")
                 //放行
                 .excludePathPatterns("/user/user/login","/user/shop/status");
+
     }
 
     /**

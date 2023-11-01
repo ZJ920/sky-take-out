@@ -2,9 +2,11 @@ package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.context.BaseContext;
+import com.sky.exception.AdminException;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,6 +49,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         //1、从请求头中获取令牌
         //jwtProperties.getAdminTokenName() = admin-token-name: token(yml配置文件中)
         String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String requestURI = request.getRequestURI();
+        String method = request.getMethod();
         //2、校验令牌
         try {
             log.info("jwt校验:{}", token);
@@ -57,14 +61,29 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             //它提供了线程局部变量的功能。每个 ThreadLocal 实例都维护了一个独立的变量副本，每个线程可以访问到自己的变量副本而不会受其他线程的影响。
             BaseContext.setCurrentId(empId);
             log.info("jwt校验通过");
+
+            //校验员工权限
+            if ("/admin/employee/page".equals(requestURI) && "GET".equals(method)){
+                if (empId != 1){
+                    throw new AdminException();
+                }
+            }
+            if ("/admin/employee".equals(requestURI) && "POST".equals(method)){
+                if (empId != 1){
+                    throw new AdminException();
+                }
+            }
             //3、通过，放行
             return true;
-        } catch (Exception ex) {
+        } catch (SignatureException s){
             //4、不通过，响应401状态码
             log.info("jwt校验不通过");
             //前后端分离页面跳转由前端实现：前端根据响应的代码判断
             response.setStatus(401);
             return false;
+        } catch (AdminException r){
+            log.info("员工没有权限");
+            throw new AdminException("没有管理员权限");
         }
     }
 }
