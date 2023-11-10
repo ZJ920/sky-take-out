@@ -6,6 +6,7 @@ import com.sky.exception.AdminException;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,11 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             }
             //3、通过，放行
             return true;
+        }catch (ExpiredJwtException e) {
+            log.error("JWT已过期: {}", e.getMessage());
+            // 返回JWT过期的错误信息给客户端
+            response.setStatus(401);
+            throw new AdminException("登录验证过期");
         } catch (SignatureException s){
             //4、不通过，响应401状态码
             log.info("jwt校验不通过");
