@@ -60,4 +60,12 @@ public interface CategoryMapper {
      */
     @Select("select category.name from category where id = #{id}")
     String selectByCategoryId(Long id);
+
+    /**
+     * 查询所有套餐
+     * @param
+     * @return
+     */
+    @Select("select * from category")
+    List<Category> allList();
 }

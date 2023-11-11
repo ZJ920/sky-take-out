@@ -24,7 +24,7 @@
             <if test="categoryId != null and categoryId != ''">
                 and setmeal.category_id = #{categoryId}
             </if>
-            <if test="status != null and status != ''">
+            <if test="status != null">
                 and setmeal.status = #{status}
             </if>
         </where>
