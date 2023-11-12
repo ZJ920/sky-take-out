@@ -64,6 +64,7 @@ public class AutoFillAspect {
                 Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
                 //通过反射为对象属性赋值
+                //在entity对象上调用setCreateTime方法，并传入now作为参数
                 setCreateTime.invoke(entity, now);
                 setCreateUser.invoke(entity, empId);
                 setUpdateTime.invoke(entity, now);
