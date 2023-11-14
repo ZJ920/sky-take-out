@@ -8,3 +8,5 @@
 **前端：day2**
 
 **SpringBoot自动装配**
+
+**SpringBoot在Linux上运行**
