@@ -9,4 +9,4 @@
 
 **SpringBoot自动装配**
 
-**SpringBoot在Linux上运行**
+**SpringBoot在Linux上运行、MySQL远程连接：2023/11/14**
