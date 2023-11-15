@@ -10,3 +10,5 @@
 **SpringBoot自动装配**
 
 **SpringBoot在Linux上运行、MySQL远程连接：2023/11/14**
+
+**SpringBoot运维相关、日后学习路线确定：2023/11/15**
